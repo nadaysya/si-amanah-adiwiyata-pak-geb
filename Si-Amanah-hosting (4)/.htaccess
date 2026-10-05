@@ -1,0 +1,23 @@
+# SI-AMANAH - pengaturan PWA (aman untuk shared hosting Apache/LiteSpeed)
+DirectoryIndex index.html index.php
+
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+  AddType text/javascript .js
+</IfModule>
+
+# Paksa HTTPS (PWA wajib https). Hapus 4 baris ini bila hosting sudah
+# mengalihkan otomatis atau muncul error "too many redirects".
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# sw.js, index.html, manifest selalu dicek ulang agar pembaruan cepat sampai.
+<IfModule mod_headers.c>
+  <FilesMatch "^(sw\.js|index\.html|manifest\.webmanifest)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>

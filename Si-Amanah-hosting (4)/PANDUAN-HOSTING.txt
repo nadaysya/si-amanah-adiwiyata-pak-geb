@@ -1,0 +1,125 @@
+SI-AMANAH - Panduan Pemasangan di Hosting
+Dikembangkan oleh Genov - Copyright 2026
+
+ISI PAKET
+  index.html  : aplikasi utama
+  api.php     : penyimpanan data di server (PHP 7.2 ke atas, tanpa database)
+  .user.ini   : menaikkan batas ukuran data (foto) hingga 64 MB
+  .htaccess   : pengaturan PWA (tipe file manifest, paksa https, cache)
+  manifest.webmanifest, sw.js, folder icons/ : file PWA (aplikasi terpasang)
+
+CARA PASANG
+1. Unggah semua file & folder icons/ ke satu folder di hosting (misal public_html/siamanah/).
+   Catatan: .user.ini dan .htaccess adalah file tersembunyi; pastikan ikut
+   terunggah (di File Manager cPanel aktifkan "Show Hidden Files").
+2. Pastikan folder tersebut dapat ditulis (izin 755 atau 775).
+   Folder data/ akan dibuat otomatis pada akses pertama.
+3. Buka alamat situs (sebaiknya https://), lalu buat akun Admin pertama.
+   Data versi lama: akun guru pertama otomatis menjadi Admin.
+4. Pindahkan data lama: di perangkat lama buka Pengaturan > Backup,
+   lalu di situs baru masuk sebagai Guru > Pengaturan > Restore.
+
+APLIKASI TERPASANG (PWA)
+- Syarat: situs dibuka lewat https:// (aktifkan SSL gratis / AutoSSL /
+  Let's Encrypt di cPanel). Tanpa https, PWA tidak aktif namun aplikasi
+  tetap berjalan normal di browser.
+- Android/Chrome/Edge/laptop: buka situs, lalu ketuk tombol "Pasang Aplikasi
+  di Perangkat" di halaman login (atau menu browser > Instal aplikasi /
+  Tambahkan ke layar utama).
+- iPhone/iPad: buka di Safari > Bagikan > Tambah ke Layar Utama.
+- Aplikasi terpasang tampil layar penuh dengan ikon logo MAN 1 Palembang,
+  dan tetap bisa dibuka saat offline (data diambil dari perangkat, lalu
+  dikirim ke server ketika internet kembali).
+- api.php dan folder data/ TIDAK pernah disimpan di cache, sehingga data
+  selalu terbaru dari server.
+- Setiap kali index.html diperbarui, ubah juga baris VERSI di sw.js
+  (misal 'si-amanah-v7' menjadi 'si-amanah-v8') agar cache lama terhapus.
+- Jika muncul error "too many redirects" setelah unggah .htaccess, hapus
+  blok "Paksa HTTPS" di .htaccess (hosting sudah mengalihkan sendiri).
+
+FITUR VERSI 7
+- Transisi pindah menu: logo Adiwiyata dengan lingkaran loading; lamanya
+  mengikuti kecepatan internet (menunggu data terbaru dari server).
+- Data realtime: aplikasi memeriksa perubahan di server setiap 5 detik
+  (ringan: hanya membaca data/meta.json.php bila tidak ada perubahan).
+- Edit Profil (semua akun): ketuk foto/inisial di bilah atas untuk mengganti
+  nama lengkap, username, kata sandi, dan foto profil. Mengganti username
+  atau kata sandi wajib memasukkan kata sandi saat ini. Bila nama diganti,
+  riwayat setoran & tabungan atas nama lama ikut diperbarui otomatis.
+- Lonceng notifikasi (sebelah kiri tombol keluar) dengan jumlah notifikasi
+  baru: pengumuman, pengajuan / pembayaran tabungan, setoran sampah,
+  kegiatan, dan laporan tanaman. Status "sudah dibaca" disimpan di server
+  (data/notif.json.php) sehingga sama di semua perangkat.
+- Pengumuman di Beranda dapat digeser manual (tombol < > atau sapuan jari).
+- Di ponsel, geser layar ke kiri / kanan untuk pindah menu utama.
+- Ikon aplikasi (PWA) memakai logo Adiwiyata resolusi tinggi.
+
+FITUR VERSI 8
+- Agenda Madrasah di Beranda: tampil hingga 3 agenda terdekat (1 atau 2
+  kolom bila agendanya 1 atau 2). Berkedip hijau (2 hari lagi), kuning emas
+  (besok), dan merah (hari ini). Ketuk agenda untuk melihat rinciannya.
+  Hanya Admin yang dapat menambah / mengubah / menghapus agenda
+  (tombol "Tambah Agenda"), dijaga juga di server.
+- Notifikasi otomatis hilang setelah 3 hari, dan ada tombol "Bersihkan"
+  di bagian bawah daftar notifikasi (tersimpan di server per akun).
+- Tombol keluar ada di menu profil (ketuk foto / inisial) di PC & ponsel.
+  Urutan ikon dari kanan: profil, notifikasi, mode layar, layar penuh,
+  status sinkron.
+- Agenda tampil ringkas dalam slider: geser ke samping (ponsel) atau
+  tombol < > (PC).
+- PC: menu samping bergradasi hijau-kuning dengan efek timbul saat disorot.
+
+PENYIMPANAN OTOMATIS
+- Setiap perubahan langsung disimpan di perangkat, lalu dikirim ke server
+  sekitar 4 detik kemudian. Selain itu ada simpan otomatis setiap 30 detik
+  (lokal + server) yang juga mengambil data terbaru dari perangkat lain.
+- Jika internet putus, data tetap aman di perangkat dan dikirim otomatis
+  saat koneksi kembali. Status terlihat pada ikon awan di bagian atas.
+- Server menyimpan cadangan otomatis (maks. tiap 1 jam, 30 cadangan
+  terakhir) di folder data/backup/.
+- Di perangkat, data juga disimpan ke IndexedDB sehingga tidak penuh
+  walaupun foto bertambah banyak.
+
+TABUNGAN BANK SAMPAH
+- Setiap akun melihat saldo miliknya (Bank Sampah > Tabungan & Penarikan),
+  lalu dapat memilih "Ajukan Pengambilan" (tunai / transfer / e-wallet)
+  atau "Tetap Ditabung".
+- Admin menerima notifikasi (angka merah di menu Bank dan pemberitahuan
+  di Beranda), lalu membuka Bank Sampah > Riwayat & Saldo dan memilih
+  Bayar Tunai, Bayar Transfer, atau Tolak.
+  Saldo berkurang otomatis setelah ditandai dibayar.
+- Admin juga dapat menambah / mengurangi saldo secara manual.
+
+FITUR LAIN
+- Pengumuman: Pengaturan > Pengumuman (khusus Admin), hingga 3 pesan yang
+  tampil bergantian setiap 5 detik di Beranda semua akun.
+- Petugas bank sampah: Pengaturan > Profil Madrasah. Bisa lebih dari satu;
+  nama pertama menjadi penanda tangan laporan bank sampah.
+- Galeri (Admin): tombol sembunyikan / tampilkan dan unduh pada setiap foto.
+  Foto yang disembunyikan tidak tampil bagi akun selain Admin.
+- Bank Sampah > Riwayat & Saldo (Admin): Pusat Dana Terkelola, Pengajuan Masuk,
+  Penyesuaian Saldo Manual, dan Riwayat Penarikan.
+- Laporan & Rekap: termasuk rekap dan cetak Pengelolaan Bank Sampah.
+- Galeri: tombol suka (love) pada setiap foto, filter "Favorit Saya",
+  dan urutan "Terpopuler". Data suka disimpan di data/likes.json.php.
+- Ingat sandi saya: hanya aktifkan di perangkat pribadi.
+
+PERAN PENGGUNA
+- Admin  : semua fitur, termasuk akun, profil madrasah, nomor WhatsApp operator,
+           backup/restore, dan hapus data.
+- Guru   : kelola kegiatan, bank sampah, penjualan, laporan & laporan tanaman.
+- Siswa Kader Adiwiyata : input kegiatan, transaksi bank sampah (dengan bukti
+           foto), penjualan hasil Adiwiyata, dan laporan tanaman.
+- Siswa Non-kader : melihat aktivitas, galeri, inventaris tanaman, dan saldo
+           tabungan sampah miliknya; dapat menghubungi operator via WhatsApp.
+
+KEAMANAN
+- File data berekstensi .php sehingga tidak bisa dibaca lewat browser.
+- Hanya Admin yang menerima data akun; Guru & Kader tidak dapat mengubah
+  akun maupun profil madrasah (dijaga juga di server).
+- Gunakan https agar kata sandi terkirim terenkripsi.
+- Login dikunci 10 menit setelah 10 kali salah sandi dari IP yang sama.
+
+TANPA HOSTING
+index.html tetap bisa dibuka langsung dari perangkat (mode lokal saja).
+Fitur cetak PDF membutuhkan koneksi internet untuk memuat pustaka PDF.
